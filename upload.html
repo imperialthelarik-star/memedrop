@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MemeDrop — Upload</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#0a0a0a;--white:#fff;--accent:#FF3B3B;--accent2:#FFD600;--gray:#f4f4f4;--mid:#888;--border:#e5e5e5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--black);}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:var(--black);color:white;display:flex;flex-direction:column;padding:28px 0;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sidebar-logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;padding:0 24px 32px;letter-spacing:-1px;}
+.sidebar-logo span{color:var(--accent);}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;color:#888;font-size:0.92rem;font-weight:500;text-decoration:none;transition:color 0.2s,background 0.2s;}
+.nav-item:hover,.nav-item.active{color:white;background:#1a1a1a;}
+.nav-item.active{border-left:3px solid var(--accent);}
+.nav-icon{font-size:1.1rem;width:20px;text-align:center;}
+.sidebar-section{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#444;padding:20px 24px 8px;}
+.sidebar-bottom{margin-top:auto;padding:0 16px;}
+.upload-btn-side{display:block;width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:800;text-align:center;text-decoration:none;}
+.main{margin-left:240px;flex:1;padding:40px;}
+.page-title{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-1px;margin-bottom:8px;}
+.page-sub{color:var(--mid);font-size:0.95rem;margin-bottom:36px;}
+.upload-grid{display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:start;}
+.upload-area{background:white;border-radius:20px;padding:40px;border:2.5px dashed var(--border);text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;margin-bottom:20px;}
+.upload-area:hover{border-color:var(--accent);background:#FFF5F5;}
+.upload-icon{font-size:3.5rem;margin-bottom:16px;}
+.upload-area h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;margin-bottom:8px;}
+.upload-area p{color:var(--mid);font-size:0.88rem;line-height:1.6;}
+.upload-area input[type=file]{display:none;}
+.preview-box{background:white;border-radius:20px;overflow:hidden;margin-bottom:20px;display:none;}
+.preview-img{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:var(--gray);}
+.preview-img img{width:100%;height:100%;object-fit:cover;}
+.preview-actions{padding:16px;}
+.btn-remove{width:100%;padding:10px;border:1.5px solid #FF3B3B;background:white;color:var(--accent);border-radius:10px;font-weight:600;cursor:pointer;}
+.form-card{background:white;border-radius:20px;padding:28px;margin-bottom:20px;}
+.form-group{margin-bottom:18px;}
+label{display:block;font-size:0.85rem;font-weight:600;margin-bottom:7px;color:#333;}
+input[type=text],textarea,select{width:100%;padding:12px 14px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:0.92rem;outline:none;background:white;}
+textarea{resize:vertical;min-height:80px;}
+.tags-wrap{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;}
+.tag{background:var(--gray);border:1.5px solid var(--border);padding:5px 12px;border-radius:50px;font-size:0.8rem;font-weight:600;cursor:pointer;}
+.tag.selected{background:var(--black);color:white;border-color:var(--black);}
+.visibility-group{display:flex;gap:10px;}
+.vis-btn{flex:1;padding:10px;border:1.5px solid var(--border);border-radius:10px;background:white;font-size:0.85rem;font-weight:600;cursor:pointer;text-align:center;}
+.vis-btn.active{border-color:var(--black);background:var(--black);color:white;}
+.progress-wrap{display:none;margin-bottom:20px;background:white;border-radius:16px;padding:20px;}
+.progress-label{font-size:0.85rem;font-weight:600;margin-bottom:10px;display:flex;justify-content:space-between;}
+.progress-bar{background:var(--gray);border-radius:50px;height:10px;}
+.progress-fill{background:var(--accent);height:100%;border-radius:50px;width:0%;}
+.submit-btn{width:100%;padding:16px;background:var(--black);color:white;border:none;border-radius:14px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;}
+.submit-btn:disabled{background:#ccc;cursor:not-allowed;}
+.error-msg{background:#FFE8E8;color:var(--accent);border-radius:10px;padding:12px 16px;font-size:0.85rem;margin-top:12px;display:none;}
+.success-msg{background:#E6FFF2;color:#00A854;border-radius:10px;padding:12px 16px;font-size:0.85rem;margin-top:12px;display:none;}
+.loading{display:inline-block;width:16px;height:16px;border:2px solid white;border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.info-card{background:white;border-radius:20px;padding:24px;margin-bottom:20px;}
+.info-card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:16px;}
+.slot-bar{background:var(--gray);border-radius:6px;height:8px;}
+.slot-fill{background:var(--accent);height:100%;border-radius:6px;}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}.upload-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Meme<span>Drop</span></div>
+    <a class="nav-item" href="browse.html"><span class="nav-icon">🔥</span> Browse</a>
+    <a class="nav-item active" href="upload.html"><span class="nav-icon">➕</span> Upload Meme</a>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="rewards.html"><span class="nav-icon">🏆</span> Rewards</a>
+    <div class="sidebar-section">Business</div>
+    <a class="nav-item" href="promote.html"><span class="nav-icon">📣</span> Promote</a>
+    <a class="nav-item" href="pricing.html"><span class="nav-icon">💳</span> Pricing</a>
+    <div class="sidebar-section">Account</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">👤</span> Profile</a>
+    <a class="nav-item" href="#" id="logoutBtn"><span class="nav-icon">🚪</span> Logout</a>
+    <div class="sidebar-bottom"><a href="upload.html" class="upload-btn-side">+ Upload Meme</a></div>
+  </aside>
+  <main class="main">
+    <div class="page-title">Upload a Meme</div>
+    <div class="page-sub" id="pageSubSlots">You have 5 free slots remaining.</div>
+    <div class="upload-grid">
+      <div>
+        <div class="upload-area" id="dropZone" onclick="document.getElementById('fileInput').click()">
+          <div class="upload-icon">🖼️</div>
+          <h3>Drop your meme here</h3>
+          <p>Click to browse or drag & drop<br/>Max size: 10MB</p>
+          <input type="file" id="fileInput" accept="image/*" onchange="previewImage(event)"/>
+        </div>
+        <div class="preview-box" id="previewBox">
+          <div class="preview-img" id="previewImg"></div>
+          <div class="preview-actions"><button class="btn-remove" onclick="removeImage()">✕ Remove Image</button></div>
+        </div>
+        <div class="progress-wrap" id="progressWrap">
+          <div class="progress-label"><span>Uploading...</span><span id="progressPct">0%</span></div>
+          <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+        </div>
+        <div class="form-card">
+          <div class="form-group"><label>Meme Title *</label><input type="text" id="memeTitle" placeholder="e.g. When stocks go up 0.1%" maxlength="80"/></div>
+          <div class="form-group"><label>Description</label><textarea id="memeDesc" placeholder="Add a funny caption..."></textarea></div>
+          <div class="form-group"><label>Category *</label>
+            <select id="memeCategory">
+              <option value="">Select category...</option>
+              <option value="trading">📈 Trading</option>
+              <option value="crypto">💰 Crypto</option>
+              <option value="funny">😂 Funny / General</option>
+              <option value="global">🌍 Global</option>
+              <option value="finance">🏦 Finance</option>
+              <option value="crash">📉 Market Crash</option>
+              <option value="moon">🚀 To The Moon</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Tags</label>
+            <div class="tags-wrap">
+              <span class="tag" onclick="this.classList.toggle('selected')">#trading</span>
+              <span class="tag" onclick="this.classList.toggle('selected')">#crypto</span>
+              <span class="tag" onclick="this.classList.toggle('selected')">#bitcoin</span>
+              <span class="tag" onclick="this.classList.toggle('selected')">#stocks</span>
+              <span class="tag" onclick="this.classList.toggle('selected')">#funny</span>
+              <span class="tag" onclick="this.classList.toggle('selected')">#viral</span>
+              <span class="tag" onclick="this.classList.toggle('selected')">#memes</span>
+            </div>
+          </div>
+          <div class="form-group"><label>Visibility</label>
+            <div class="visibility-group">
+              <div class="vis-btn active" id="visPublic" onclick="setVis('public')">🌍 Public</div>
+              <div class="vis-btn" id="visPrivate" onclick="setVis('private')">🔒 Private</div>
+            </div>
+          </div>
+        </div>
+        <div class="error-msg" id="errorMsg"></div>
+        <div class="success-msg" id="successMsg"></div>
+        <button class="submit-btn" id="submitBtn" onclick="uploadMeme()">🚀 Publish Meme</button>
+      </div>
+      <div>
+        <div class="info-card">
+          <div class="info-card-title">🎰 Your Upload Slots</div>
+          <div style="font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;margin-bottom:12px;"><span id="slotsLeft" style="color:var(--accent);">5</span> remaining</div>
+          <div class="slot-bar"><div class="slot-fill" id="slotFill" style="width:0%"></div></div>
+          <a href="rewards.html" style="display:block;margin-top:14px;text-align:center;background:var(--accent2);color:var(--black);padding:10px;border-radius:10px;font-weight:700;font-size:0.85rem;text-decoration:none;">🏆 Earn 10 More Free Slots</a>
+        </div>
+        <div class="info-card">
+          <div class="info-card-title">💡 Tips</div>
+          <div style="display:flex;flex-direction:column;gap:10px;font-size:0.85rem;">
+            <div>📐 Square format best hai</div>
+            <div>🏷️ 3+ tags = 2x more reach</div>
+            <div>⏰ 8-11 PM pe post karo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,setDoc,updateDoc,collection,addDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const firebaseConfig={apiKey:"AIzaSyCO5Xv7vseE4KieV1WWAMn83Rq7JRWtDN4",authDomain:"memedrop-147ef.firebaseapp.com",projectId:"memedrop-147ef",storageBucket:"memedrop-147ef.firebasestorage.app",messagingSenderId:"379521979487",appId:"1:379521979487:web:8239bd6c2cbc11c7aeb7ea"};
+const CLOUD='dkcelsxjt',PRESET='memedrop';
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+let currentUser=null,userData=null,selectedFile=null,visibility='public';
+
+onAuthStateChanged(auth,async(user)=>{
+  if(!user){window.location.href='login.html';return;}
+  currentUser=user;
+  try{
+    const ref=doc(db,'users',user.uid);
+    const snap=await getDoc(ref);
+    if(snap.exists()){
+      userData=snap.data();
+    } else {
+      // Auto create user document if missing
+      userData={uid:user.uid,name:user.displayName||'User',email:user.email||'',plan:'free',memeSlots:5,rewardPoints:50,memesUploaded:0};
+      await setDoc(ref,{...userData,createdAt:serverTimestamp()});
+    }
+    loadUI();
+  } catch(e){
+    console.error(e);
+    // Use defaults if error
+    userData={memeSlots:5,memesUploaded:0};
+    loadUI();
+  }
+});
+
+function loadUI(){
+  const slots=userData.memeSlots||5;
+  const used=userData.memesUploaded||0;
+  const left=slots-used;
+  document.getElementById('slotsLeft').textContent=left;
+  document.getElementById('slotFill').style.width=Math.min((used/slots)*100,100)+'%';
+  document.getElementById('pageSubSlots').textContent='You have '+left+' free slot'+(left!==1?'s':'')+' remaining.';
+}
+
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await signOut(auth);window.location.href='login.html';});
+
+window.previewImage=(e)=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  if(file.size>10*1024*1024){showError('File 10MB se bari hai.');return;}
+  selectedFile=file;
+  const reader=new FileReader();
+  reader.onload=(ev)=>{
+    document.getElementById('previewImg').innerHTML=`<img src="${ev.target.result}" style="width:100%;height:100%;object-fit:cover;"/>`;
+    document.getElementById('dropZone').style.display='none';
+    document.getElementById('previewBox').style.display='block';
+  };
+  reader.readAsDataURL(file);
+};
+
+window.removeImage=()=>{
+  selectedFile=null;
+  document.getElementById('fileInput').value='';
+  document.getElementById('previewImg').innerHTML='';
+  document.getElementById('previewBox').style.display='none';
+  document.getElementById('dropZone').style.display='block';
+};
+
+window.setVis=(v)=>{
+  visibility=v;
+  document.getElementById('visPublic').classList.toggle('active',v==='public');
+  document.getElementById('visPrivate').classList.toggle('active',v==='private');
+};
+
+async function uploadToCloudinary(file){
+  const fd=new FormData();
+  fd.append('file',file);
+  fd.append('upload_preset',PRESET);
+  fd.append('folder','memedrop/'+currentUser.uid);
+  return new Promise((resolve,reject)=>{
+    const xhr=new XMLHttpRequest();
+    xhr.open('POST','https://api.cloudinary.com/v1_1/'+CLOUD+'/image/upload');
+    xhr.upload.onprogress=(e)=>{
+      if(e.lengthComputable){
+        const p=Math.round((e.loaded/e.total)*100);
+        document.getElementById('progressFill').style.width=p+'%';
+        document.getElementById('progressPct').textContent=p+'%';
+      }
+    };
+    xhr.onload=()=>{const r=JSON.parse(xhr.responseText);if(xhr.status===200)resolve(r);else reject(r);};
+    xhr.onerror=()=>reject(new Error('Upload failed'));
+    xhr.send(fd);
+  });
+}
+
+window.uploadMeme=async()=>{
+  const title=document.getElementById('memeTitle').value.trim();
+  const desc=document.getElementById('memeDesc').value.trim();
+  const category=document.getElementById('memeCategory').value;
+  if(!selectedFile)return showError('Pehle image select karo.');
+  if(!title)return showError('Title daalna zaroori hai.');
+  if(!category)return showError('Category select karo.');
+  const slots=userData.memeSlots||5;
+  const used=userData.memesUploaded||0;
+  if(used>=slots)return showError('Koi slot nahi bacha!');
+  const tags=[...document.querySelectorAll('.tag.selected')].map(t=>t.textContent);
+  const btn=document.getElementById('submitBtn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="loading"></span>Uploading...';
+  document.getElementById('progressWrap').style.display='block';
+  document.getElementById('errorMsg').style.display='none';
+  try{
+    const cr=await uploadToCloudinary(selectedFile);
+    await addDoc(collection(db,'memes'),{
+      uid:currentUser.uid,
+      userName:userData.name||currentUser.displayName||'User',
+      title,description:desc,category,tags,visibility,
+      imageUrl:cr.secure_url,publicId:cr.public_id,
+      likes:0,views:0,shares:0,comments:0,promoted:false,
+      createdAt:serverTimestamp()
+    });
+    await updateDoc(doc(db,'users',currentUser.uid),{memesUploaded:used+1});
+    document.getElementById('progressWrap').style.display='none';
+    document.getElementById('successMsg').textContent='🎉 Meme publish ho gaya!';
+    document.getElementById('successMsg').style.display='block';
+    setTimeout(()=>window.location.href='browse.html',2000);
+  } catch(err){
+    console.error(err);
+    showError('Upload fail. Error: '+err.message);
+    btn.disabled=false;
+    btn.innerHTML='🚀 Publish Meme';
+    document.getElementById('progressWrap').style.display='none';
+  }
+};
+
+function showError(msg){
+  const e=document.getElementById('errorMsg');
+  e.textContent='❌ '+msg;
+  e.style.display='block';
+}
+
+const dz=document.getElementById('dropZone');
+dz.addEventListener('dragover',e=>{e.preventDefault();dz.style.borderColor='var(--accent)';});
+dz.addEventListener('dragleave',()=>dz.style.borderColor='');
+dz.addEventListener('drop',e=>{
+  e.preventDefault();dz.style.borderColor='';
+  const f=e.dataTransfer.files[0];
+  if(f){document.getElementById('fileInput').files=e.dataTransfer.files;window.previewImage({target:{files:[f]}});}
+});
+</script>
+</body>
+</html>

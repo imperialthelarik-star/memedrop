@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MemeDrop — Rewards</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#0a0a0a;--white:#fff;--accent:#FF3B3B;--accent2:#FFD600;--accent3:#00C2FF;--gray:#f4f4f4;--mid:#888;--border:#e5e5e5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--black);}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:var(--black);color:white;display:flex;flex-direction:column;padding:28px 0;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sidebar-logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;padding:0 24px 32px;letter-spacing:-1px;}
+.sidebar-logo span{color:var(--accent);}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;color:#888;font-size:0.92rem;font-weight:500;text-decoration:none;transition:color 0.2s,background 0.2s;}
+.nav-item:hover,.nav-item.active{color:white;background:#1a1a1a;}
+.nav-item.active{border-left:3px solid var(--accent);}
+.nav-icon{font-size:1.1rem;width:20px;text-align:center;}
+.sidebar-section{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#444;padding:20px 24px 8px;}
+.sidebar-bottom{margin-top:auto;padding:0 16px;}
+.upload-btn-side{display:block;width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:800;text-align:center;text-decoration:none;}
+.main{margin-left:240px;flex:1;padding:36px;}
+.page-title{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-1px;margin-bottom:6px;}
+.page-sub{color:var(--mid);font-size:0.95rem;margin-bottom:36px;}
+.points-hero{background:var(--black);color:white;border-radius:24px;padding:40px;display:flex;align-items:center;gap:40px;margin-bottom:28px;position:relative;overflow:hidden;}
+.points-hero::before{content:'🏆';font-size:12rem;position:absolute;right:-20px;top:-20px;opacity:0.06;}
+.pts-big{font-family:'Syne',sans-serif;font-size:4rem;font-weight:800;letter-spacing:-2px;color:var(--accent2);}
+.pts-label{font-size:0.9rem;color:#888;margin-top:4px;}
+.pts-divider{width:1px;height:80px;background:#2a2a2a;}
+.pts-info h3{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;margin-bottom:8px;}
+.pts-info p{color:#888;font-size:0.88rem;line-height:1.6;max-width:300px;}
+.tasks-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;margin-bottom:28px;}
+.task-card{background:white;border-radius:18px;padding:24px;border:2px solid var(--border);transition:all 0.2s;}
+.task-card:hover{border-color:var(--accent2);transform:translateY(-3px);}
+.task-card.done{opacity:0.6;border-color:#00C26A;background:#F6FFF9;}
+.task-top{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px;}
+.task-icon{font-size:2rem;}
+.task-reward{background:var(--accent2);color:var(--black);font-size:0.78rem;font-weight:800;padding:4px 12px;border-radius:50px;}
+.task-reward.memes{background:#E8F5FF;color:var(--accent3);}
+.task-card h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:6px;}
+.task-card p{font-size:0.85rem;color:var(--mid);line-height:1.5;margin-bottom:16px;}
+.task-bar{background:var(--gray);border-radius:50px;height:8px;margin-bottom:8px;}
+.task-fill{height:100%;border-radius:50px;background:var(--accent2);}
+.task-progress{display:flex;justify-content:space-between;font-size:0.75rem;color:var(--mid);}
+.task-btn{width:100%;margin-top:14px;padding:10px;border-radius:10px;border:none;font-family:'Syne',sans-serif;font-size:0.88rem;font-weight:800;cursor:pointer;background:var(--black);color:white;transition:background 0.2s;}
+.task-btn:hover{background:var(--accent);}
+.task-btn.done-btn{background:#00C26A;cursor:default;}
+.card{background:white;border-radius:20px;padding:24px;}
+.card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:18px;}
+.history-item{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px solid var(--border);}
+.history-item:last-child{border:none;}
+.hist-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.hist-info strong{display:block;font-size:0.88rem;font-weight:600;}
+.hist-info span{font-size:0.78rem;color:var(--mid);}
+.hist-pts{margin-left:auto;font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:800;color:var(--accent2);}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}.points-hero{flex-direction:column;gap:20px;}.pts-divider{display:none;}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Meme<span>Drop</span></div>
+    <a class="nav-item" href="browse.html"><span class="nav-icon">🔥</span> Browse</a>
+    <a class="nav-item" href="upload.html"><span class="nav-icon">➕</span> Upload Meme</a>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item active" href="rewards.html"><span class="nav-icon">🏆</span> Rewards</a>
+    <div class="sidebar-section">Business</div>
+    <a class="nav-item" href="promote.html"><span class="nav-icon">📣</span> Promote</a>
+    <a class="nav-item" href="pricing.html"><span class="nav-icon">💳</span> Pricing</a>
+    <div class="sidebar-section">Account</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">👤</span> Profile</a>
+    <a class="nav-item" href="#" id="logoutBtn"><span class="nav-icon">🚪</span> Logout</a>
+    <div class="sidebar-bottom"><a href="upload.html" class="upload-btn-side">+ Upload Meme</a></div>
+  </aside>
+  <main class="main">
+    <div class="page-title">🏆 Rewards</div>
+    <div class="page-sub">Complete tasks to earn points and unlock more meme slots.</div>
+    <div class="points-hero">
+      <div><div class="pts-big" id="totalPoints">0</div><div class="pts-label">Total Reward Points</div></div>
+      <div class="pts-divider"></div>
+      <div class="pts-info"><h3>Keep going!</h3><p>Earn more points to unlock additional meme slots. Complete daily tasks to level up faster.</p></div>
+    </div>
+    <div class="tasks-grid">
+      <div class="task-card done">
+        <div class="task-top"><div class="task-icon">🎉</div><div class="task-reward">+50 pts</div></div>
+        <h3>Sign Up Bonus</h3>
+        <p>Create your MemeDrop account.</p>
+        <div class="task-bar"><div class="task-fill" style="width:100%;background:#00C26A;"></div></div>
+        <div class="task-progress"><span>Completed!</span><span>1/1</span></div>
+        <button class="task-btn done-btn">✓ Done</button>
+      </div>
+      <div class="task-card">
+        <div class="task-top"><div class="task-icon">🔥</div><div class="task-reward">+30 pts</div></div>
+        <h3>7-Day Login Streak</h3>
+        <p>Log in every day for 7 consecutive days.</p>
+        <div class="task-bar"><div class="task-fill" style="width:14%;"></div></div>
+        <div class="task-progress"><span>1 of 7 days</span><span>14%</span></div>
+        <button class="task-btn" onclick="window.location.href='browse.html'">Login Today →</button>
+      </div>
+      <div class="task-card">
+        <div class="task-top"><div class="task-icon">👥</div><div class="task-reward memes">+3 Meme Slots</div></div>
+        <h3>Refer 3 Friends</h3>
+        <p>Invite friends to join MemeDrop.</p>
+        <div class="task-bar"><div class="task-fill" style="width:0%;background:#00C2FF;"></div></div>
+        <div class="task-progress"><span>0 of 3 referred</span><span>0%</span></div>
+        <button class="task-btn" onclick="copyReferral()">📋 Copy Referral Link</button>
+      </div>
+      <div class="task-card">
+        <div class="task-top"><div class="task-icon">⭐</div><div class="task-reward memes">+5 Meme Slots</div></div>
+        <h3>Get Your First Viral Meme</h3>
+        <p>Get 100+ shares on any single meme.</p>
+        <div class="task-bar"><div class="task-fill" style="width:0%;background:#FF3B3B;"></div></div>
+        <div class="task-progress"><span>0 of 100 shares</span><span>0%</span></div>
+        <button class="task-btn" onclick="window.location.href='upload.html'">Upload a Meme →</button>
+      </div>
+      <div class="task-card">
+        <div class="task-top"><div class="task-icon">📤</div><div class="task-reward">+20 pts</div></div>
+        <h3>Upload 5 Memes</h3>
+        <p>Share your creativity. Upload 5 memes total.</p>
+        <div class="task-bar"><div class="task-fill" id="upload5bar" style="width:0%;"></div></div>
+        <div class="task-progress"><span id="upload5text">0 of 5 uploaded</span><span id="upload5pct">0%</span></div>
+        <button class="task-btn" onclick="window.location.href='upload.html'">Upload Now →</button>
+      </div>
+      <div class="task-card">
+        <div class="task-top"><div class="task-icon">❤️</div><div class="task-reward">+15 pts</div></div>
+        <h3>Get 100 Likes Total</h3>
+        <p>Collect 100 likes across all your memes.</p>
+        <div class="task-bar"><div class="task-fill" id="likes100bar" style="width:0%;background:#FFD600;"></div></div>
+        <div class="task-progress"><span id="likes100text">0 of 100 likes</span><span id="likes100pct">0%</span></div>
+        <button class="task-btn" onclick="window.location.href='browse.html'">Browse & Share →</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📜 Reward History</div>
+      <div class="history-item"><div class="hist-icon" style="background:#E6FFF2;">🎉</div><div class="hist-info"><strong>Sign Up Bonus</strong><span>Account created</span></div><div class="hist-pts">+50 pts</div></div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,collection,query,where,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCO5Xv7vseE4KieV1WWAMn83Rq7JRWtDN4",authDomain:"memedrop-147ef.firebaseapp.com",projectId:"memedrop-147ef",storageBucket:"memedrop-147ef.firebasestorage.app",messagingSenderId:"379521979487",appId:"1:379521979487:web:8239bd6c2cbc11c7aeb7ea"};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+onAuthStateChanged(auth,async(user)=>{
+if(!user){window.location.href='login.html';return;}
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await signOut(auth);window.location.href='login.html';});
+const snap=await getDoc(doc(db,'users',user.uid));
+const ud=snap.data();
+document.getElementById('totalPoints').textContent=ud.rewardPoints||0;
+const used=ud.memesUploaded||0;
+const pct=Math.min((used/5)*100,100);
+document.getElementById('upload5bar').style.width=pct+'%';
+document.getElementById('upload5text').textContent=used+' of 5 uploaded';
+document.getElementById('upload5pct').textContent=Math.round(pct)+'%';
+const memesQ=query(collection(db,'memes'),where('uid','==',user.uid));
+const memesSnap=await getDocs(memesQ);
+let totalLikes=0;
+memesSnap.forEach(d=>totalLikes+=(d.data().likes||0));
+const likePct=Math.min((totalLikes/100)*100,100);
+document.getElementById('likes100bar').style.width=likePct+'%';
+document.getElementById('likes100text').textContent=totalLikes+' of 100 likes';
+document.getElementById('likes100pct').textContent=Math.round(likePct)+'%';
+});
+window.copyReferral=()=>{navigator.clipboard.writeText(location.origin+'/login.html?ref=USER123').then(()=>alert('✅ Referral link copied!'));};
+</script>
+</body>
+</html>

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MemeDrop — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#0a0a0a;--white:#fff;--accent:#FF3B3B;--accent2:#FFD600;--gray:#f4f4f4;--mid:#888;--border:#e5e5e5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);min-height:100vh;display:flex;}
+.left-panel{width:45%;background:var(--black);color:white;display:flex;flex-direction:column;justify-content:center;padding:60px;position:relative;overflow:hidden;}
+.left-panel::before{content:'😂';font-size:20rem;position:absolute;right:-60px;bottom:-60px;opacity:0.06;}
+.logo{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-1px;margin-bottom:60px;}
+.logo span{color:var(--accent);}
+.left-panel h2{font-family:'Syne',sans-serif;font-size:2.8rem;font-weight:800;letter-spacing:-1.5px;line-height:1.1;margin-bottom:20px;}
+.left-panel p{color:#888;font-size:1rem;line-height:1.7;max-width:320px;}
+.perks{margin-top:48px;display:flex;flex-direction:column;gap:16px;}
+.perk{display:flex;align-items:center;gap:14px;}
+.perk-icon{width:40px;height:40px;border-radius:10px;background:#1a1a1a;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;}
+.perk-text strong{display:block;font-size:0.92rem;font-weight:600;}
+.perk-text span{font-size:0.82rem;color:#666;}
+.right-panel{flex:1;display:flex;align-items:center;justify-content:center;padding:40px;}
+.auth-box{background:white;border-radius:24px;padding:48px 44px;width:100%;max-width:440px;box-shadow:0 8px 40px rgba(0,0,0,0.08);}
+.tabs{display:flex;background:var(--gray);border-radius:12px;padding:4px;margin-bottom:36px;}
+.tab{flex:1;padding:10px;text-align:center;border-radius:9px;cursor:pointer;font-size:0.92rem;font-weight:600;border:none;background:transparent;transition:background 0.2s,color 0.2s;color:var(--mid);}
+.tab.active{background:white;color:var(--black);box-shadow:0 2px 8px rgba(0,0,0,0.08);}
+.form-section{display:none;}
+.form-section.active{display:block;}
+.form-group{margin-bottom:18px;}
+label{display:block;font-size:0.85rem;font-weight:600;margin-bottom:7px;color:#333;}
+input{width:100%;padding:13px 16px;border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;transition:border-color 0.2s;background:white;}
+input:focus{border-color:var(--black);}
+.btn-main{width:100%;padding:15px;background:var(--black);color:white;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;cursor:pointer;margin-top:8px;transition:background 0.2s,transform 0.15s;}
+.btn-main:hover{background:var(--accent);transform:translateY(-1px);}
+.btn-main:disabled{background:#ccc;cursor:not-allowed;transform:none;}
+.divider{display:flex;align-items:center;gap:12px;margin:22px 0;color:var(--mid);font-size:0.82rem;}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border);}
+.btn-google{width:100%;padding:13px;background:white;color:var(--black);border:1.5px solid var(--border);border-radius:12px;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:600;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;transition:border-color 0.2s,transform 0.15s;}
+.btn-google:hover{border-color:var(--black);transform:translateY(-1px);}
+.error-msg{background:#FFE8E8;color:var(--accent);border-radius:10px;padding:10px 14px;font-size:0.85rem;margin-top:12px;display:none;}
+.success-msg{background:#E6FFF2;color:#00A854;border-radius:10px;padding:10px 14px;font-size:0.85rem;margin-top:12px;display:none;}
+.free-badge{background:#FFF3CD;color:#856404;border-radius:10px;padding:12px 16px;font-size:0.85rem;text-align:center;margin-top:20px;line-height:1.5;}
+.free-badge strong{color:var(--accent);}
+.forgot{text-align:right;margin-top:-10px;margin-bottom:16px;}
+.forgot a{font-size:0.82rem;color:var(--mid);text-decoration:none;cursor:pointer;}
+.forgot a:hover{color:var(--accent);}
+.loading{display:inline-block;width:16px;height:16px;border:2px solid white;border-top-color:transparent;border-radius:50%;animation:spin 0.6s linear infinite;margin-right:8px;vertical-align:middle;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:768px){.left-panel{display:none;}body{display:block;}.right-panel{min-height:100vh;}}
+</style>
+</head>
+<body>
+<div class="left-panel">
+  <div class="logo">Meme<span>Drop</span></div>
+  <h2>Join the Meme Revolution.</h2>
+  <p>Create, share, and monetize memes globally.</p>
+  <div class="perks">
+    <div class="perk"><div class="perk-icon">🎉</div><div class="perk-text"><strong>5 Free Memes on Signup</strong><span>Start posting immediately</span></div></div>
+    <div class="perk"><div class="perk-icon">🏆</div><div class="perk-text"><strong>Earn 10 More via Rewards</strong><span>Complete tasks, get slots</span></div></div>
+    <div class="perk"><div class="perk-icon">💸</div><div class="perk-text"><strong>Monetize Your Content</strong><span>Brands pay for meme promotions</span></div></div>
+    <div class="perk"><div class="perk-icon">🌍</div><div class="perk-text"><strong>Global Audience</strong><span>Reach millions worldwide</span></div></div>
+  </div>
+</div>
+<div class="right-panel">
+  <div class="auth-box">
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login',this)">Login</button>
+      <button class="tab" onclick="switchTab('signup',this)">Sign Up</button>
+    </div>
+    <div class="form-section active" id="login">
+      <div class="form-group"><label>Email Address</label><input type="email" id="loginEmail" placeholder="you@example.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="loginPassword" placeholder="••••••••"/></div>
+      <div class="forgot"><a onclick="forgotPassword()">Forgot password?</a></div>
+      <button class="btn-main" id="loginBtn" onclick="loginWithEmail()">Login to MemeDrop →</button>
+      <div class="error-msg" id="loginError"></div>
+      <div class="success-msg" id="loginSuccess"></div>
+      <div class="divider">or continue with</div>
+      <button class="btn-google" onclick="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <div class="free-badge">🎉 New here? <strong>Sign up and get 5 free memes instantly!</strong></div>
+    </div>
+    <div class="form-section" id="signup">
+      <div class="form-group"><label>Full Name</label><input type="text" id="signupName" placeholder="Your name"/></div>
+      <div class="form-group"><label>Email Address</label><input type="email" id="signupEmail" placeholder="you@example.com"/></div>
+      <div class="form-group"><label>Password</label><input type="password" id="signupPassword" placeholder="Min 8 characters"/></div>
+      <div class="form-group"><label>Confirm Password</label><input type="password" id="signupConfirm" placeholder="Repeat password"/></div>
+      <button class="btn-main" id="signupBtn" onclick="signupWithEmail()">Create Free Account →</button>
+      <div class="error-msg" id="signupError"></div>
+      <div class="success-msg" id="signupSuccess"></div>
+      <div class="divider">or sign up with</div>
+      <button class="btn-google" onclick="loginWithGoogle()">
+        <svg width="18" height="18" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/><path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/><path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/><path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.18 1.48-4.97 2.31-8.16 2.31-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/></svg>
+        Continue with Google
+      </button>
+      <div class="free-badge">🎉 You'll get <strong>5 free meme uploads</strong> + unlock 10 more via rewards!</div>
+    </div>
+  </div>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,signInWithEmailAndPassword,createUserWithEmailAndPassword,signInWithPopup,GoogleAuthProvider,sendPasswordResetEmail,updateProfile,onAuthStateChanged}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,setDoc,getDoc,serverTimestamp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCO5Xv7vseE4KieV1WWAMn83Rq7JRWtDN4",authDomain:"memedrop-147ef.firebaseapp.com",projectId:"memedrop-147ef",storageBucket:"memedrop-147ef.firebasestorage.app",messagingSenderId:"379521979487",appId:"1:379521979487:web:8239bd6c2cbc11c7aeb7ea"};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const googleProvider=new GoogleAuthProvider();
+onAuthStateChanged(auth,(user)=>{if(user)window.location.href='browse.html';});
+async function saveUser(user,name=''){
+const ref=doc(db,'users',user.uid);
+const snap=await getDoc(ref);
+if(!snap.exists()){await setDoc(ref,{uid:user.uid,name:name||user.displayName||'MemeDrop User',email:user.email,photoURL:user.photoURL||'',plan:'free',memeSlots:5,rewardPoints:50,memesUploaded:0,createdAt:serverTimestamp()});}
+}
+function setLoading(id,on){
+const b=document.getElementById(id);
+b.disabled=on;
+b.innerHTML=on?'<span class="loading"></span>Please wait...':(id==='loginBtn'?'Login to MemeDrop →':'Create Free Account →');
+}
+function showError(id,msg){const e=document.getElementById(id);e.textContent='❌ '+msg;e.style.display='block';setTimeout(()=>e.style.display='none',5000);}
+function showSuccess(id,msg){const e=document.getElementById(id);e.textContent='✅ '+msg;e.style.display='block';}
+const errs={'auth/user-not-found':'Email registered nahi hai.','auth/wrong-password':'Password galat hai.','auth/invalid-email':'Email format sahi nahi.','auth/too-many-requests':'Bahut zyada tries.','auth/invalid-credential':'Email ya password galat hai.','auth/email-already-in-use':'Email pehle se registered hai.','auth/weak-password':'Password zyada strong karo.'};
+window.loginWithEmail=async()=>{
+const email=document.getElementById('loginEmail').value.trim();
+const pass=document.getElementById('loginPassword').value;
+if(!email||!pass)return showError('loginError','Email aur password daalo.');
+setLoading('loginBtn',true);
+try{await signInWithEmailAndPassword(auth,email,pass);window.location.href='browse.html';}
+catch(e){showError('loginError',errs[e.code]||e.message);setLoading('loginBtn',false);}
+};
+window.signupWithEmail=async()=>{
+const name=document.getElementById('signupName').value.trim();
+const email=document.getElementById('signupEmail').value.trim();
+const pass=document.getElementById('signupPassword').value;
+const conf=document.getElementById('signupConfirm').value;
+if(!name||!email||!pass||!conf)return showError('signupError','Sab fields fill karo.');
+if(pass.length<8)return showError('signupError','Password 8 characters ka hona chahiye.');
+if(pass!==conf)return showError('signupError','Passwords match nahi karte.');
+setLoading('signupBtn',true);
+try{const c=await createUserWithEmailAndPassword(auth,email,pass);await updateProfile(c.user,{displayName:name});await saveUser(c.user,name);showSuccess('signupSuccess','Account ban gaya! Redirect...');setTimeout(()=>window.location.href='browse.html',1500);}
+catch(e){showError('signupError',errs[e.code]||e.message);setLoading('signupBtn',false);}
+};
+window.loginWithGoogle=async()=>{
+try{const r=await signInWithPopup(auth,googleProvider);await saveUser(r.user);window.location.href='browse.html';}
+catch(e){if(e.code!=='auth/popup-closed-by-user')showError('loginError','Google login failed.');}
+};
+window.forgotPassword=async()=>{
+const email=document.getElementById('loginEmail').value.trim();
+if(!email)return showError('loginError','Pehle email daalo.');
+try{await sendPasswordResetEmail(auth,email);showSuccess('loginSuccess','Reset email bhej diya!');}
+catch(e){showError('loginError','Email nahi mila.');}
+};
+window.switchTab=(tab,el)=>{
+document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+document.querySelectorAll('.form-section').forEach(f=>f.classList.remove('active'));
+document.getElementById(tab).classList.add('active');
+el.classList.add('active');
+};
+document.addEventListener('keydown',(e)=>{if(e.key==='Enter'){if(document.getElementById('login').classList.contains('active'))loginWithEmail();else signupWithEmail();}});
+</script>
+</body>
+</html>

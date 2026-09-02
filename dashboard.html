@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MemeDrop — Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#0a0a0a;--white:#fff;--accent:#FF3B3B;--accent2:#FFD600;--accent3:#00C2FF;--gray:#f4f4f4;--mid:#888;--border:#e5e5e5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--black);}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:var(--black);color:white;display:flex;flex-direction:column;padding:28px 0;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sidebar-logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;padding:0 24px 32px;letter-spacing:-1px;}
+.sidebar-logo span{color:var(--accent);}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;color:#888;font-size:0.92rem;font-weight:500;text-decoration:none;transition:color 0.2s,background 0.2s;}
+.nav-item:hover,.nav-item.active{color:white;background:#1a1a1a;}
+.nav-item.active{border-left:3px solid var(--accent);}
+.nav-icon{font-size:1.1rem;width:20px;text-align:center;}
+.sidebar-section{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#444;padding:20px 24px 8px;}
+.sidebar-bottom{margin-top:auto;padding:0 16px;}
+.upload-btn-side{display:block;width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:800;text-align:center;text-decoration:none;}
+.main{margin-left:240px;flex:1;padding:36px;}
+.dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:32px;flex-wrap:wrap;gap:16px;}
+.welcome h1{font-family:'Syne',sans-serif;font-size:1.8rem;font-weight:800;letter-spacing:-0.5px;}
+.welcome p{color:var(--mid);font-size:0.92rem;margin-top:4px;}
+.btn-sm{padding:10px 20px;border-radius:50px;font-size:0.88rem;font-weight:700;border:none;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:6px;}
+.btn-dark{background:var(--black);color:white;}
+.btn-dark:hover{background:var(--accent);}
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{background:white;border-radius:16px;padding:22px 20px;}
+.stat-card.accent{background:var(--black);color:white;}
+.stat-label{font-size:0.78rem;font-weight:600;color:var(--mid);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.stat-card.accent .stat-label{color:#666;}
+.stat-val{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-1px;}
+.stat-change{font-size:0.78rem;margin-top:6px;color:#00C26A;}
+.dash-grid{display:grid;grid-template-columns:1fr 320px;gap:24px;}
+.card{background:white;border-radius:20px;padding:24px;margin-bottom:20px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;}
+.card-link{font-size:0.82rem;color:var(--accent);text-decoration:none;font-weight:600;}
+.meme-list{display:flex;flex-direction:column;gap:12px;}
+.meme-row{display:flex;align-items:center;gap:14px;padding:10px;border-radius:12px;transition:background 0.15s;}
+.meme-row:hover{background:var(--gray);}
+.meme-thumb{width:52px;height:52px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.6rem;flex-shrink:0;overflow:hidden;}
+.meme-thumb img{width:100%;height:100%;object-fit:cover;}
+.meme-info{flex:1;}
+.meme-info strong{display:block;font-size:0.9rem;font-weight:600;margin-bottom:2px;}
+.meme-info span{font-size:0.78rem;color:var(--mid);}
+.meme-stats{display:flex;gap:12px;font-size:0.78rem;color:var(--mid);}
+.meme-status{padding:4px 10px;border-radius:50px;font-size:0.72rem;font-weight:700;}
+.status-live{background:#E6FFF2;color:#00A854;}
+.activity-list{display:flex;flex-direction:column;}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:14px 0;border-bottom:1px solid var(--border);}
+.activity-item:last-child{border:none;}
+.act-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.act-text strong{display:block;font-size:0.88rem;font-weight:600;}
+.act-text span{font-size:0.78rem;color:var(--mid);}
+.promo-banner{background:var(--black);color:white;border-radius:20px;padding:24px;margin-bottom:20px;display:flex;align-items:center;gap:20px;}
+.promo-banner h3{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;margin-bottom:4px;}
+.promo-banner p{font-size:0.82rem;color:#888;line-height:1.5;}
+.promo-banner a{display:block;margin-top:12px;background:var(--accent2);color:var(--black);padding:8px 16px;border-radius:8px;font-weight:700;font-size:0.82rem;text-decoration:none;text-align:center;}
+.reward-progress{display:flex;flex-direction:column;gap:14px;}
+.rp-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+.rp-name{font-size:0.85rem;font-weight:600;}
+.rp-val{font-size:0.78rem;color:var(--mid);}
+.rp-bar{background:var(--gray);border-radius:50px;height:8px;}
+.rp-fill{height:100%;border-radius:50px;background:var(--accent2);}
+.empty-memes{text-align:center;padding:40px;color:var(--mid);}
+.empty-memes a{display:inline-block;margin-top:12px;background:var(--black);color:white;padding:10px 20px;border-radius:10px;text-decoration:none;font-weight:700;font-size:0.85rem;}
+@media(max-width:1100px){.stats-row{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}.dash-grid{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Meme<span>Drop</span></div>
+    <a class="nav-item" href="browse.html"><span class="nav-icon">🔥</span> Browse</a>
+    <a class="nav-item" href="upload.html"><span class="nav-icon">➕</span> Upload Meme</a>
+    <a class="nav-item active" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="rewards.html"><span class="nav-icon">🏆</span> Rewards</a>
+    <div class="sidebar-section">Business</div>
+    <a class="nav-item" href="promote.html"><span class="nav-icon">📣</span> Promote</a>
+    <a class="nav-item" href="pricing.html"><span class="nav-icon">💳</span> Pricing</a>
+    <div class="sidebar-section">Account</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">👤</span> Profile</a>
+    <a class="nav-item" href="#" id="logoutBtn"><span class="nav-icon">🚪</span> Logout</a>
+    <div class="sidebar-bottom"><a href="upload.html" class="upload-btn-side">+ Upload Meme</a></div>
+  </aside>
+  <main class="main">
+    <div class="dash-header">
+      <div class="welcome"><h1 id="welcomeMsg">Welcome back! 👋</h1><p>Here's how your memes are performing.</p></div>
+      <div style="display:flex;gap:10px;">
+        <a href="upload.html" class="btn-sm btn-dark">➕ Upload Meme</a>
+        <a href="promote.html" class="btn-sm" style="background:white;color:var(--black);border:1.5px solid var(--border);">📣 Promote</a>
+      </div>
+    </div>
+    <div class="stats-row">
+      <div class="stat-card accent"><div class="stat-label">Total Views</div><div class="stat-val" id="totalViews">0</div><div class="stat-change">Your memes</div></div>
+      <div class="stat-card"><div class="stat-label">Total Likes</div><div class="stat-val" id="totalLikes">0</div></div>
+      <div class="stat-card"><div class="stat-label">Meme Slots</div><div class="stat-val" id="slotsInfo">-</div><div class="stat-change" style="color:var(--mid);">remaining</div></div>
+      <div class="stat-card"><div class="stat-label">Reward Points</div><div class="stat-val" id="rewardPoints">0</div></div>
+    </div>
+    <div class="dash-grid">
+      <div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🖼️ My Memes</div><a href="browse.html" class="card-link">Browse all →</a></div>
+          <div class="meme-list" id="myMemesList"><div class="empty-memes"><p>empty state </p><a href="upload.html">Upload First Meme →</a></div></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">⚡ Recent Activity</div></div>
+          <div class="activity-list">
+            <div class="activity-item"><div class="act-icon" style="background:#E6FFF2;">🎉</div><div class="act-text"><strong>Welcome to MemeDrop!</strong><span>Account successfully created</span></div></div>
+            <div class="activity-item"><div class="act-icon" style="background:#FFF9E6;">🏆</div><div class="act-text"><strong>Signup Bonus — 50 points</strong><span>Reward credited to account</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="promo-banner">
+          <div style="font-size:2.5rem;flex-shrink:0;">📣</div>
+          <div><h3>Boost Your Memes</h3><p>Reach 10x more people with a paid promotion. Starting at $5.</p><a href="promote.html">Start Promoting →</a></div>
+        </div>
+        <div class="card">
+          <div class="card-header"><div class="card-title">🏆 Reward Progress</div><a href="rewards.html" class="card-link">View all →</a></div>
+          <div class="reward-progress">
+            <div><div class="rp-header"><span class="rp-name">👥 Refer Friends</span><span class="rp-val">0/3</span></div><div class="rp-bar"><div class="rp-fill" style="width:0%;background:#FF3B3B;"></div></div></div>
+            <div><div class="rp-header"><span class="rp-name">🔥 Daily Login</span><span class="rp-val">1/7</span></div><div class="rp-bar"><div class="rp-fill" style="width:14%;background:#FFD600;"></div></div></div>
+            <div><div class="rp-header"><span class="rp-name">📤 Upload Memes</span><span class="rp-val" id="uploadProgress">0/5</span></div><div class="rp-bar"><div class="rp-fill" id="uploadBar" style="width:0%;"></div></div></div>
+          </div>
+          <a href="rewards.html" style="display:block;margin-top:20px;text-align:center;background:var(--accent2);color:var(--black);padding:11px;border-radius:10px;font-weight:700;font-size:0.85rem;text-decoration:none;">🎁 Claim Rewards →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,doc,getDoc,collection,query,where,orderBy,getDocs}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCO5Xv7vseE4KieV1WWAMn83Rq7JRWtDN4",authDomain:"memedrop-147ef.firebaseapp.com",projectId:"memedrop-147ef",storageBucket:"memedrop-147ef.firebasestorage.app",messagingSenderId:"379521979487",appId:"1:379521979487:web:8239bd6c2cbc11c7aeb7ea"};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+onAuthStateChanged(auth,async(user)=>{
+if(!user){window.location.href='login.html';return;}
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await signOut(auth);window.location.href='login.html';});
+const snap=await getDoc(doc(db,'users',user.uid));
+const ud=snap.data();
+document.getElementById('welcomeMsg').textContent='Welcome back, '+(ud.name||'User')+' 👋';
+document.getElementById('rewardPoints').textContent=ud.rewardPoints||0;
+const slots=ud.memeSlots||5,used=ud.memesUploaded||0,left=slots-used;
+document.getElementById('slotsInfo').textContent=left;
+document.getElementById('uploadProgress').textContent=used+'/5';
+document.getElementById('uploadBar').style.width=Math.min((used/5)*100,100)+'%';
+const memesQ=query(collection(db,'memes'),where('uid','==',user.uid),orderBy('createdAt','desc'));
+const memesSnap=await getDocs(memesQ);
+let totalViews=0,totalLikes=0;
+const memes=[];
+memesSnap.forEach(d=>{const m={id:d.id,...d.data()};memes.push(m);totalViews+=m.views||0;totalLikes+=m.likes||0;});
+document.getElementById('totalViews').textContent=totalViews;
+document.getElementById('totalLikes').textContent=totalLikes;
+if(memes.length>0){
+document.getElementById('myMemesList').innerHTML=memes.slice(0,3).map(m=>`
+<div class="meme-row">
+<div class="meme-thumb" style="background:#f4f4f4;">${m.imageUrl?`<img src="${m.imageUrl}"/>`:'😂'}</div>
+<div class="meme-info"><strong>${m.title}</strong><span>${m.category||'General'}</span></div>
+<div class="meme-stats"><span>❤️ ${m.likes||0}</span><span>👁 ${m.views||0}</span></div>
+<div class="meme-status status-live">● Live</div>
+</div>`).join('');
+}
+});
+</script>
+</body>
+</html>

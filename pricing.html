@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MemeDrop — Pricing</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#0a0a0a;--white:#fff;--accent:#FF3B3B;--accent2:#FFD600;--gray:#f4f4f4;--mid:#888;--border:#e5e5e5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--black);}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:var(--black);color:white;display:flex;flex-direction:column;padding:28px 0;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sidebar-logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;padding:0 24px 32px;letter-spacing:-1px;}
+.sidebar-logo span{color:var(--accent);}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;color:#888;font-size:0.92rem;font-weight:500;text-decoration:none;transition:color 0.2s,background 0.2s;}
+.nav-item:hover,.nav-item.active{color:white;background:#1a1a1a;}
+.nav-item.active{border-left:3px solid var(--accent);}
+.nav-icon{font-size:1.1rem;width:20px;text-align:center;}
+.sidebar-section{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#444;padding:20px 24px 8px;}
+.sidebar-bottom{margin-top:auto;padding:0 16px;}
+.upload-btn-side{display:block;width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:800;text-align:center;text-decoration:none;}
+.main{margin-left:240px;flex:1;padding:36px;}
+.page-title{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-1px;margin-bottom:6px;text-align:center;}
+.page-sub{color:var(--mid);font-size:0.95rem;margin-bottom:36px;text-align:center;}
+.billing-toggle{display:flex;align-items:center;justify-content:center;gap:14px;margin-bottom:40px;}
+.toggle-label{font-size:0.9rem;font-weight:600;color:var(--mid);}
+.toggle-label.active{color:var(--black);}
+.toggle{width:52px;height:28px;background:#ddd;border-radius:50px;cursor:pointer;position:relative;transition:background 0.2s;}
+.toggle.on{background:var(--black);}
+.toggle-dot{width:22px;height:22px;background:white;border-radius:50%;position:absolute;top:3px;left:3px;transition:left 0.2s;box-shadow:0 2px 6px rgba(0,0,0,0.2);}
+.toggle.on .toggle-dot{left:27px;}
+.save-badge{background:var(--accent2);color:var(--black);font-size:0.72rem;font-weight:800;padding:3px 10px;border-radius:50px;}
+.pricing-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:900px;margin:0 auto 48px;}
+.price-card{background:white;border-radius:24px;padding:32px;border:2px solid var(--border);transition:transform 0.2s,box-shadow 0.2s;position:relative;}
+.price-card:hover{transform:translateY(-6px);box-shadow:0 20px 50px rgba(0,0,0,0.1);}
+.price-card.featured{background:var(--black);color:white;border-color:var(--black);}
+.featured-badge{position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--accent);color:white;font-size:0.72rem;font-weight:700;padding:5px 16px;border-radius:50px;text-transform:uppercase;letter-spacing:1px;white-space:nowrap;}
+.plan-icon{font-size:2rem;margin-bottom:16px;}
+.plan-name{font-family:'Syne',sans-serif;font-size:0.9rem;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;color:var(--mid);}
+.price-card.featured .plan-name{color:#666;}
+.plan-price{font-family:'Syne',sans-serif;font-size:3rem;font-weight:800;letter-spacing:-2px;line-height:1;}
+.plan-price sup{font-size:1.2rem;vertical-align:top;margin-top:8px;display:inline-block;}
+.plan-price .per{font-family:'DM Sans',sans-serif;font-size:0.9rem;font-weight:400;opacity:0.5;letter-spacing:0;}
+.plan-desc{font-size:0.85rem;color:var(--mid);margin:10px 0 24px;line-height:1.5;}
+.price-card.featured .plan-desc{color:#888;}
+.plan-divider{height:1px;background:var(--border);margin-bottom:20px;}
+.price-card.featured .plan-divider{background:#2a2a2a;}
+.plan-features{list-style:none;display:flex;flex-direction:column;gap:11px;}
+.plan-features li{display:flex;align-items:flex-start;gap:9px;font-size:0.88rem;line-height:1.4;}
+.plan-features li::before{content:'✓';font-weight:800;color:var(--accent);font-size:0.85rem;flex-shrink:0;margin-top:1px;}
+.price-card.featured .plan-features li::before{color:var(--accent2);}
+.plan-features li.no::before{content:'✕';color:#ccc;}
+.plan-btn{display:block;width:100%;margin-top:28px;padding:14px;border-radius:50px;font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:800;border:2px solid var(--black);background:transparent;cursor:pointer;color:var(--black);transition:all 0.2s;text-align:center;text-decoration:none;}
+.plan-btn:hover{background:var(--black);color:white;}
+.price-card.featured .plan-btn{background:var(--accent2);color:var(--black);border-color:var(--accent2);}
+.price-card.featured .plan-btn:hover{background:white;border-color:white;}
+.faq-section{max-width:680px;margin:0 auto;}
+.faq-title{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;letter-spacing:-0.5px;margin-bottom:20px;text-align:center;}
+.faq-item{background:white;border-radius:14px;margin-bottom:10px;overflow:hidden;}
+.faq-q{padding:18px 20px;font-weight:600;font-size:0.92rem;cursor:pointer;display:flex;justify-content:space-between;align-items:center;}
+.faq-q:hover{background:var(--gray);}
+.faq-q .arrow{transition:transform 0.2s;}
+.faq-q.open .arrow{transform:rotate(180deg);}
+.faq-a{padding:0 20px;max-height:0;overflow:hidden;transition:max-height 0.3s,padding 0.3s;font-size:0.88rem;color:var(--mid);line-height:1.7;}
+.faq-a.open{max-height:200px;padding:0 20px 18px;}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}.pricing-grid{grid-template-columns:1fr;max-width:400px;}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Meme<span>Drop</span></div>
+    <a class="nav-item" href="browse.html"><span class="nav-icon">🔥</span> Browse</a>
+    <a class="nav-item" href="upload.html"><span class="nav-icon">➕</span> Upload Meme</a>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="rewards.html"><span class="nav-icon">🏆</span> Rewards</a>
+    <div class="sidebar-section">Business</div>
+    <a class="nav-item" href="promote.html"><span class="nav-icon">📣</span> Promote</a>
+    <a class="nav-item active" href="pricing.html"><span class="nav-icon">💳</span> Pricing</a>
+    <div class="sidebar-section">Account</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">👤</span> Profile</a>
+    <a class="nav-item" href="#" id="logoutBtn"><span class="nav-icon">🚪</span> Logout</a>
+    <div class="sidebar-bottom"><a href="upload.html" class="upload-btn-side">+ Upload Meme</a></div>
+  </aside>
+  <main class="main">
+    <div class="page-title">Simple, Transparent Pricing</div>
+    <div class="page-sub">Start free. Upgrade when ready. Cancel anytime.</div>
+    <div class="billing-toggle">
+      <span class="toggle-label active" id="monthLabel">Monthly</span>
+      <div class="toggle" id="billingToggle" onclick="toggleBilling()"><div class="toggle-dot"></div></div>
+      <span class="toggle-label" id="yearLabel">Yearly</span>
+      <span class="save-badge" id="saveBadge" style="display:none;">Save 30%</span>
+    </div>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="plan-icon">🆓</div>
+        <div class="plan-name">Free</div>
+        <div class="plan-price"><sup>$</sup>0<span class="per">/mo</span></div>
+        <div class="plan-desc">Get started with no strings attached.</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>5 meme uploads</li>
+          <li>+10 via rewards</li>
+          <li>Global visibility</li>
+          <li>Trading & all categories</li>
+          <li>Basic analytics</li>
+          <li class="no">Monetization</li>
+          <li class="no">Priority support</li>
+        </ul>
+        <a href="login.html" class="plan-btn">Get Started Free</a>
+      </div>
+      <div class="price-card featured">
+        <div class="featured-badge">Most Popular</div>
+        <div class="plan-icon">🚀</div>
+        <div class="plan-name">Creator</div>
+        <div class="plan-price"><sup>$</sup><span class="price-val">9</span><span class="per">/mo</span></div>
+        <div class="plan-desc">For serious creators who want to grow and earn.</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Unlimited uploads</li>
+          <li>Monetization enabled</li>
+          <li>Priority feed placement</li>
+          <li>Advanced analytics</li>
+          <li>Custom profile branding</li>
+          <li>Early feature access</li>
+          <li>Email support</li>
+        </ul>
+        <a href="login.html" class="plan-btn">Start Creator Plan</a>
+      </div>
+      <div class="price-card">
+        <div class="plan-icon">💼</div>
+        <div class="plan-name">Business</div>
+        <div class="plan-price"><sup>$</sup><span class="price-val">49</span><span class="per">/mo</span></div>
+        <div class="plan-desc">For brands, agencies, and power advertisers.</div>
+        <div class="plan-divider"></div>
+        <ul class="plan-features">
+          <li>Everything in Creator</li>
+          <li>Meme ad campaigns</li>
+          <li>Campaign dashboard</li>
+          <li>Audience targeting</li>
+          <li>Dedicated account manager</li>
+          <li>Priority support 24/7</li>
+          <li>Custom integrations</li>
+        </ul>
+        <a href="login.html" class="plan-btn">Start Business Plan</a>
+      </div>
+    </div>
+    <div class="faq-section">
+      <div class="faq-title">Frequently Asked Questions</div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Free slots khatam ho jayein toh? <span class="arrow">▼</span></div><div class="faq-a">Rewards se 10 aur slots earn karo — refer friends, daily login, viral memes. Ya Creator plan upgrade karo unlimited ke liye.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Cancel kar sakte hain? <span class="arrow">▼</span></div><div class="faq-a">Haan, anytime. Cancel karne ke baad billing period tak plan benefits milte rahenge.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">Promotions kaise kaam karte hain? <span class="arrow">▼</span></div><div class="faq-a">Koi bhi user ya brand meme promote kar sakta hai main feed mein. Budget, audience, duration set karo. 2 hours mein live ho jata hai.</div></div>
+      <div class="faq-item"><div class="faq-q" onclick="toggleFaq(this)">MemeDrop globally available hai? <span class="arrow">▼</span></div><div class="faq-a">Haan! 150+ countries mein available hai. Sab major payment methods support karte hain.</div></div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+const firebaseConfig={apiKey:"AIzaSyCO5Xv7vseE4KieV1WWAMn83Rq7JRWtDN4",authDomain:"memedrop-147ef.firebaseapp.com",projectId:"memedrop-147ef",storageBucket:"memedrop-147ef.firebasestorage.app",messagingSenderId:"379521979487",appId:"1:379521979487:web:8239bd6c2cbc11c7aeb7ea"};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+onAuthStateChanged(auth,(user)=>{if(!user)return;});
+document.getElementById('logoutBtn').addEventListener('click',async()=>{const{signOut}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");await signOut(auth);window.location.href='login.html';});
+let yearly=false;
+window.toggleBilling=()=>{
+yearly=!yearly;
+document.getElementById('billingToggle').classList.toggle('on',yearly);
+document.getElementById('monthLabel').classList.toggle('active',!yearly);
+document.getElementById('yearLabel').classList.toggle('active',yearly);
+document.getElementById('saveBadge').style.display=yearly?'inline':'none';
+document.querySelectorAll('.price-val').forEach((el,i)=>{const m=[9,49];el.textContent=yearly?Math.round(m[i]*0.7):m[i];});
+};
+window.toggleFaq=(el)=>{const a=el.nextElementSibling;el.classList.toggle('open');a.classList.toggle('open');};
+</script>
+</body>
+</html>

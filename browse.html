@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MemeDrop — Browse</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#0a0a0a;--white:#fff;--accent:#FF3B3B;--accent2:#FFD600;--gray:#f4f4f4;--mid:#888;--border:#e5e5e5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--black);}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:var(--black);color:white;display:flex;flex-direction:column;padding:28px 0;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sidebar-logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;padding:0 24px 32px;letter-spacing:-1px;}
+.sidebar-logo span{color:var(--accent);}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;color:#888;font-size:0.92rem;font-weight:500;text-decoration:none;transition:color 0.2s,background 0.2s;}
+.nav-item:hover,.nav-item.active{color:white;background:#1a1a1a;}
+.nav-item.active{border-left:3px solid var(--accent);}
+.nav-icon{font-size:1.1rem;width:20px;text-align:center;}
+.sidebar-section{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#444;padding:20px 24px 8px;}
+.sidebar-bottom{margin-top:auto;padding:0 16px;}
+.upload-btn-side{display:block;width:100%;padding:13px;background:var(--accent);color:white;border:none;border-radius:12px;font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:800;text-align:center;text-decoration:none;}
+.main{margin-left:240px;flex:1;padding:32px;}
+.topbar{display:flex;align-items:center;gap:16px;margin-bottom:28px;flex-wrap:wrap;}
+.search-box{flex:1;min-width:200px;display:flex;align-items:center;gap:10px;background:white;border:1.5px solid var(--border);border-radius:12px;padding:11px 16px;}
+.search-box input{border:none;outline:none;font-family:'DM Sans',sans-serif;font-size:0.95rem;flex:1;background:transparent;}
+.top-avatar{width:40px;height:40px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.9rem;cursor:pointer;text-decoration:none;}
+.notif{width:40px;height:40px;border-radius:50%;background:white;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;}
+.categories{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:28px;}
+.cat-btn{padding:8px 18px;border-radius:50px;border:1.5px solid var(--border);background:white;font-size:0.85rem;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.cat-btn:hover,.cat-btn.active{background:var(--black);color:white;border-color:var(--black);}
+.content-wrap{display:flex;gap:24px;}
+.meme-feed{flex:1;}
+.meme-grid{columns:4 240px;gap:18px;}
+.meme-card{background:white;border-radius:16px;overflow:hidden;margin-bottom:18px;break-inside:avoid;box-shadow:0 2px 12px rgba(0,0,0,0.06);transition:transform 0.2s,box-shadow 0.2s;cursor:pointer;}
+.meme-card:hover{transform:translateY(-4px);box-shadow:0 12px 32px rgba(0,0,0,0.12);}
+.meme-img{width:100%;aspect-ratio:1;object-fit:cover;display:block;}
+.meme-placeholder{width:100%;aspect-ratio:1;display:flex;align-items:center;justify-content:center;font-size:4rem;}
+.meme-body{padding:14px 16px;}
+.meme-title{font-family:'Syne',sans-serif;font-size:0.92rem;font-weight:800;margin-bottom:8px;line-height:1.3;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.meme-meta{display:flex;align-items:center;justify-content:space-between;}
+.meme-user{display:flex;align-items:center;gap:6px;font-size:0.78rem;color:var(--mid);}
+.user-dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:white;flex-shrink:0;}
+.meme-actions{display:flex;gap:8px;}
+.meme-act{background:none;border:none;cursor:pointer;font-size:0.8rem;color:var(--mid);display:flex;align-items:center;gap:3px;padding:4px;}
+.meme-act:hover{color:var(--accent);}
+.promo-tag{background:var(--accent2);color:var(--black);font-size:0.65rem;font-weight:700;padding:3px 8px;border-radius:50px;text-transform:uppercase;display:inline-block;margin-bottom:6px;}
+.empty-state{text-align:center;padding:80px 20px;color:var(--mid);}
+.empty-icon{font-size:4rem;margin-bottom:16px;}
+.empty-state h3{font-family:'Syne',sans-serif;font-size:1.2rem;font-weight:800;color:var(--black);margin-bottom:8px;}
+.empty-state a{display:inline-block;margin-top:16px;background:var(--black);color:white;padding:12px 28px;border-radius:50px;text-decoration:none;font-weight:700;}
+.skeleton{background:linear-gradient(90deg,#f0f0f0 25%,#e0e0e0 50%,#f0f0f0 75%);background-size:200% 100%;animation:shimmer 1.5s infinite;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.skeleton-card{background:white;border-radius:16px;overflow:hidden;margin-bottom:18px;break-inside:avoid;}
+.skeleton-img{width:100%;aspect-ratio:1;}
+.skeleton-line{height:14px;border-radius:4px;margin:14px 16px 8px;}
+.skeleton-line-sm{height:10px;border-radius:4px;margin:0 16px 14px;width:60%;}
+.trending-panel{width:280px;flex-shrink:0;}
+.panel-card{background:white;border-radius:16px;padding:20px;margin-bottom:16px;}
+.panel-title{font-family:'Syne',sans-serif;font-size:0.95rem;font-weight:800;margin-bottom:16px;}
+.trend-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--border);}
+.trend-item:last-child{border:none;}
+.trend-rank{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:#ddd;width:24px;}
+.trend-info strong{display:block;font-size:0.85rem;font-weight:600;}
+.trend-info span{font-size:0.75rem;color:var(--mid);}
+.slots-bar{background:var(--gray);border-radius:8px;height:8px;}
+.slots-fill{background:var(--accent);height:100%;border-radius:8px;}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}.trending-panel{display:none;}.meme-grid{columns:2 160px;}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Meme<span>Drop</span></div>
+    <a class="nav-item active" href="browse.html"><span class="nav-icon">🔥</span> Browse</a>
+    <a class="nav-item" href="upload.html"><span class="nav-icon">➕</span> Upload Meme</a>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">📊</span> Dashboard</a>
+    <a class="nav-item" href="rewards.html"><span class="nav-icon">🏆</span> Rewards</a>
+    <div class="sidebar-section">Business</div>
+    <a class="nav-item" href="promote.html"><span class="nav-icon">📣</span> Promote</a>
+    <a class="nav-item" href="pricing.html"><span class="nav-icon">💳</span> Pricing</a>
+    <div class="sidebar-section">Account</div>
+    <a class="nav-item" href="dashboard.html"><span class="nav-icon">👤</span> Profile</a>
+    <a class="nav-item" href="#" id="logoutBtn"><span class="nav-icon">🚪</span> Logout</a>
+    <div class="sidebar-bottom"><a href="upload.html" class="upload-btn-side">+ Upload Meme</a></div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div class="search-box"><span>🔍</span><input type="text" id="searchInput" placeholder="Search memes..." oninput="applyFilters()"/></div>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <div class="notif">🔔</div>
+        <a href="dashboard.html" class="top-avatar" id="topAvatar">U</a>
+      </div>
+    </div>
+    <div class="categories">
+      <button class="cat-btn active" onclick="setCategory('all',this)">🔥 All</button>
+      <button class="cat-btn" onclick="setCategory('trading',this)">📈 Trading</button>
+      <button class="cat-btn" onclick="setCategory('crypto',this)">💰 Crypto</button>
+      <button class="cat-btn" onclick="setCategory('funny',this)">😂 Funny</button>
+      <button class="cat-btn" onclick="setCategory('global',this)">🌍 Global</button>
+      <button class="cat-btn" onclick="setCategory('finance',this)">🏦 Finance</button>
+      <button class="cat-btn" onclick="setCategory('moon',this)">🚀 Moon</button>
+    </div>
+    <div class="content-wrap">
+      <div class="meme-feed">
+        <div class="meme-grid" id="memeGrid">
+          <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line-sm"></div></div>
+          <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line-sm"></div></div>
+          <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line-sm"></div></div>
+          <div class="skeleton-card"><div class="skeleton skeleton-img"></div><div class="skeleton skeleton-line"></div><div class="skeleton skeleton-line-sm"></div></div>
+        </div>
+      </div>
+      <div class="trending-panel">
+        <div class="panel-card">
+          <div class="panel-title">🔥 Trending Tags</div>
+          <div class="trend-item"><div class="trend-rank">1</div><div class="trend-info"><strong>#trading</strong><span>Most used</span></div></div>
+          <div class="trend-item"><div class="trend-rank">2</div><div class="trend-info"><strong>#crypto</strong><span>Trending</span></div></div>
+          <div class="trend-item"><div class="trend-rank">3</div><div class="trend-info"><strong>#bitcoin</strong><span>Always hot</span></div></div>
+          <div class="trend-item"><div class="trend-rank">4</div><div class="trend-info"><strong>#funny</strong><span>Most liked</span></div></div>
+          <div class="trend-item"><div class="trend-rank">5</div><div class="trend-info"><strong>#viral</strong><span>Fast growing</span></div></div>
+        </div>
+        <div class="panel-card">
+          <div class="panel-title">🎰 Your Slots</div>
+          <div class="slots-bar"><div class="slots-fill" id="slotsBarFill" style="width:0%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:0.78rem;color:var(--mid);margin-top:6px;" id="slotsText">Loading...</div>
+          <a href="rewards.html" style="display:block;margin-top:14px;text-align:center;background:var(--accent2);color:var(--black);padding:10px;border-radius:10px;font-weight:700;font-size:0.85rem;text-decoration:none;">🏆 Earn 10 More Free</a>
+        </div>
+        <div class="panel-card">
+          <div class="panel-title">📣 Advertise</div>
+          <p style="font-size:0.85rem;color:var(--mid);line-height:1.6;margin-bottom:14px;">Reach millions with meme promotions.</p>
+          <a href="promote.html" style="display:block;text-align:center;background:var(--black);color:white;padding:10px;border-radius:10px;font-weight:700;font-size:0.85rem;text-decoration:none;">Start Promoting →</a>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,collection,query,orderBy,getDocs,doc,getDoc,updateDoc,increment}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCO5Xv7vseE4KieV1WWAMn83Rq7JRWtDN4",authDomain:"memedrop-147ef.firebaseapp.com",projectId:"memedrop-147ef",storageBucket:"memedrop-147ef.firebasestorage.app",messagingSenderId:"379521979487",appId:"1:379521979487:web:8239bd6c2cbc11c7aeb7ea"};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+let currentUser=null,allMemes=[],currentCategory='all';
+const colors=['#FF3B3B','#00C2FF','#FFD600','#00C26A','#9B59B6'];
+const emojis={trading:'📈',crypto:'💰',funny:'😂',global:'🌍',finance:'🏦',crash:'📉',moon:'🚀'};
+onAuthStateChanged(auth,async(user)=>{
+currentUser=user;
+if(user){
+document.getElementById('topAvatar').textContent=(user.displayName||user.email||'U')[0].toUpperCase();
+const snap=await getDoc(doc(db,'users',user.uid));
+if(snap.exists()){const ud=snap.data();const slots=ud.memeSlots||5;const used=ud.memesUploaded||0;const left=slots-used;document.getElementById('slotsBarFill').style.width=Math.min((used/slots)*100,100)+'%';document.getElementById('slotsText').innerHTML=`<span>${used} used</span><span>${left} left</span>`;}
+}
+loadAllMemes();
+});
+document.getElementById('logoutBtn').addEventListener('click',async()=>{await signOut(auth);window.location.href='login.html';});
+async function loadAllMemes(){
+try{
+const q=query(collection(db,'memes'),orderBy('createdAt','desc'));
+const snap=await getDocs(q);
+allMemes=[];
+snap.forEach(d=>allMemes.push({id:d.id,...d.data()}));
+applyFilters();
+}catch(err){console.error(err);document.getElementById('memeGrid').innerHTML='<div class="empty-state"><div class="empty-icon">⚠️</div><h3>Error loading. Refresh karo.</h3></div>';}
+}
+window.applyFilters=()=>{
+const search=document.getElementById('searchInput').value.toLowerCase();
+let filtered=allMemes;
+if(currentCategory!=='all')filtered=filtered.filter(m=>m.category===currentCategory);
+if(search)filtered=filtered.filter(m=>m.title?.toLowerCase().includes(search)||m.tags?.some(t=>t.toLowerCase().includes(search)));
+renderMemes(filtered);
+};
+window.setCategory=(cat,el)=>{currentCategory=cat;document.querySelectorAll('.cat-btn').forEach(b=>b.classList.remove('active'));el.classList.add('active');applyFilters();};
+function renderMemes(memes){
+const grid=document.getElementById('memeGrid');
+if(memes.length===0){grid.innerHTML='<div class="empty-state"><div class="empty-icon">😴</div><h3>Koi meme nahi mila</h3><p>Pehle meme upload karo!</p><a href="upload.html">Upload First Meme →</a></div>';return;}
+grid.innerHTML=memes.map((m,i)=>{
+const color=colors[i%colors.length];
+const initial=(m.userName||'U')[0].toUpperCase();
+const emoji=emojis[m.category]||'😂';
+return`<div class="meme-card" onclick="viewMeme('${m.id}')">
+${m.imageUrl?`<img class="meme-img" src="${m.imageUrl}" alt="${m.title}" loading="lazy" onerror="this.style.display='none';this.nextSibling.style.display='flex'"/><div class="meme-placeholder" style="display:none;background:${color}22;">${emoji}</div>`:`<div class="meme-placeholder" style="background:${color}22;">${emoji}</div>`}
+<div class="meme-body">
+${m.promoted?'<div class="promo-tag">📣 Promoted</div>':''}
+<div class="meme-title">${m.title}</div>
+<div class="meme-meta">
+<div class="meme-user"><div class="user-dot" style="background:${color};">${initial}</div>${m.userName||'Anonymous'}</div>
+<div class="meme-actions"><button class="meme-act" id="like-${m.id}" onclick="event.stopPropagation();likeMeme('${m.id}')">❤️ ${m.likes||0}</button><button class="meme-act" onclick="event.stopPropagation();shareMeme('${m.id}')">🔗</button></div>
+</div></div></div>`;
+}).join('');
+}
+window.likeMeme=async(id)=>{if(!currentUser){window.location.href='login.html';return;}try{await updateDoc(doc(db,'memes',id),{likes:increment(1)});const btn=document.getElementById('like-'+id);if(btn){const cur=parseInt(btn.textContent.replace('❤️ ',''))+1;btn.textContent=`❤️ ${cur}`;btn.style.color='var(--accent)';}}catch(e){console.error(e);}};
+window.shareMeme=(id)=>{navigator.clipboard.writeText(`${location.origin}/meme-detail.html?id=${id}`).then(()=>alert('🔗 Link copied!'));};
+window.viewMeme=(id)=>{window.location.href=`meme-detail.html?id=${id}`;};
+</script>
+</body>
+</html>

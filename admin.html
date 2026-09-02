@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>MemeDrop — Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+:root{--black:#0a0a0a;--white:#fff;--accent:#FF3B3B;--accent2:#FFD600;--accent3:#00C2FF;--gray:#f4f4f4;--mid:#888;--border:#e5e5e5;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray);color:var(--black);}
+.layout{display:flex;min-height:100vh;}
+.sidebar{width:240px;background:#0a0a0a;color:white;display:flex;flex-direction:column;padding:28px 0;position:fixed;top:0;left:0;bottom:0;z-index:50;}
+.sidebar-logo{font-family:'Syne',sans-serif;font-size:1.5rem;font-weight:800;padding:0 24px 8px;letter-spacing:-1px;}
+.sidebar-logo span{color:var(--accent);}
+.admin-tag{font-size:0.65rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--accent);padding:0 24px;margin-bottom:28px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:12px 24px;color:#888;font-size:0.92rem;font-weight:500;text-decoration:none;transition:color 0.2s,background 0.2s;}
+.nav-item:hover,.nav-item.active{color:white;background:#1a1a1a;}
+.nav-item.active{border-left:3px solid var(--accent);}
+.nav-icon{font-size:1.1rem;width:20px;text-align:center;}
+.sidebar-section{font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:1.5px;color:#333;padding:20px 24px 8px;}
+.sidebar-bottom{margin-top:auto;padding:16px;}
+.back-to-site{display:block;text-align:center;padding:10px;border:1px solid #2a2a2a;border-radius:10px;color:#888;font-size:0.82rem;font-weight:600;text-decoration:none;}
+.back-to-site:hover{border-color:#888;color:white;}
+.main{margin-left:240px;flex:1;padding:36px;}
+.page-title{font-family:'Syne',sans-serif;font-size:2rem;font-weight:800;letter-spacing:-1px;margin-bottom:6px;}
+.page-sub{color:var(--mid);font-size:0.92rem;margin-bottom:32px;}
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+.stat-card{background:white;border-radius:16px;padding:22px 20px;}
+.stat-card.red{background:var(--accent);color:white;}
+.stat-label{font-size:0.75rem;font-weight:700;color:var(--mid);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:10px;}
+.stat-card.red .stat-label{color:rgba(255,255,255,0.7);}
+.stat-val{font-family:'Syne',sans-serif;font-size:2.2rem;font-weight:800;letter-spacing:-1px;}
+.stat-change{font-size:0.75rem;margin-top:6px;color:#00C26A;}
+.stat-card.red .stat-change{color:rgba(255,255,255,0.8);}
+.card{background:white;border-radius:20px;padding:24px;margin-bottom:20px;}
+.card-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.card-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;}
+table{width:100%;border-collapse:collapse;}
+th{text-align:left;font-size:0.75rem;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;color:var(--mid);padding-bottom:12px;border-bottom:1px solid var(--border);}
+td{padding:14px 0;border-bottom:1px solid var(--border);font-size:0.88rem;vertical-align:middle;}
+tr:last-child td{border:none;}
+.user-row{display:flex;align-items:center;gap:10px;}
+.user-av{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:0.8rem;color:white;flex-shrink:0;}
+.user-name{font-weight:600;font-size:0.88rem;}
+.user-email{font-size:0.75rem;color:var(--mid);}
+.badge{padding:3px 10px;border-radius:50px;font-size:0.72rem;font-weight:700;}
+.badge-free{background:var(--gray);color:var(--mid);}
+.badge-creator{background:#E8F5FF;color:#0070CC;}
+.badge-business{background:#FFF9E6;color:#856404;}
+.badge-live{background:#E6FFF2;color:#00A854;}
+.badge-review{background:#FFF3CD;color:#856404;}
+.action-btns{display:flex;gap:6px;}
+.btn-xs{padding:5px 10px;border-radius:6px;font-size:0.75rem;font-weight:600;border:none;cursor:pointer;}
+.btn-approve{background:#E6FFF2;color:#00A854;}
+.btn-approve:hover{background:#00A854;color:white;}
+.btn-remove{background:#FFE8E8;color:var(--accent);}
+.btn-remove:hover{background:var(--accent);color:white;}
+.btn-view{background:var(--gray);color:var(--black);}
+.btn-view:hover{background:var(--black);color:white;}
+.revenue-row{display:flex;align-items:center;gap:16px;padding:12px 0;border-bottom:1px solid var(--border);}
+.revenue-row:last-child{border:none;}
+.rev-icon{width:36px;height:36px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0;}
+.rev-info strong{display:block;font-size:0.85rem;font-weight:600;}
+.rev-info span{font-size:0.75rem;color:var(--mid);}
+.rev-amount{margin-left:auto;font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#00A854;}
+.loading-state{text-align:center;padding:40px;color:var(--mid);}
+@media(max-width:1100px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}}
+</style>
+</head>
+<body>
+<div class="layout">
+  <aside class="sidebar">
+    <div class="sidebar-logo">Meme<span>Drop</span></div>
+    <div class="admin-tag">⚙️ Admin Panel</div>
+    <a class="nav-item active" href="admin.html"><span class="nav-icon">📊</span> Overview</a>
+    <a class="nav-item" href="#"><span class="nav-icon">👥</span> Users</a>
+    <a class="nav-item" href="#"><span class="nav-icon">🖼️</span> Memes</a>
+    <a class="nav-item" href="#"><span class="nav-icon">📣</span> Campaigns</a>
+    <div class="sidebar-section">Finance</div>
+    <a class="nav-item" href="#"><span class="nav-icon">💰</span> Revenue</a>
+    <a class="nav-item" href="#"><span class="nav-icon">📋</span> Subscriptions</a>
+    <div class="sidebar-section">Settings</div>
+    <a class="nav-item" href="#"><span class="nav-icon">⚙️</span> Settings</a>
+    <a class="nav-item" href="#"><span class="nav-icon">🚩</span> Reports</a>
+    <div class="sidebar-bottom"><a href="browse.html" class="back-to-site">← Back to Site</a></div>
+  </aside>
+  <main class="main">
+    <div class="page-title">Admin Overview</div>
+    <div class="page-sub">Platform health at a glance</div>
+    <div class="stats-grid">
+      <div class="stat-card red"><div class="stat-label">Total Users</div><div class="stat-val" id="totalUsers">-</div><div class="stat-change">Registered accounts</div></div>
+      <div class="stat-card"><div class="stat-label">Total Memes</div><div class="stat-val" id="totalMemes">-</div><div class="stat-change" style="color:var(--mid);">Published</div></div>
+      <div class="stat-card"><div class="stat-label">Total Likes</div><div class="stat-val" id="totalLikes">-</div></div>
+      <div class="stat-card"><div class="stat-label">Total Views</div><div class="stat-val" id="totalViews">-</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><div class="card-title">🖼️ Recent Memes</div></div>
+      <div id="memesTable"><div class="loading-state">Loading...</div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div class="card">
+        <div class="card-header"><div class="card-title">👥 Recent Users</div></div>
+        <div id="usersTable"><div class="loading-state">Loading...</div></div>
+      </div>
+      <div class="card">
+        <div class="card-header"><div class="card-title">📊 Platform Stats</div></div>
+        <div id="statsExtra"><div class="loading-state">Loading...</div></div>
+      </div>
+    </div>
+  </main>
+</div>
+<script type="module">
+import{initializeApp}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import{getAuth,onAuthStateChanged,signOut}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import{getFirestore,collection,getDocs,orderBy,query,limit}from"https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+const firebaseConfig={apiKey:"AIzaSyCO5Xv7vseE4KieV1WWAMn83Rq7JRWtDN4",authDomain:"memedrop-147ef.firebaseapp.com",projectId:"memedrop-147ef",storageBucket:"memedrop-147ef.firebasestorage.app",messagingSenderId:"379521979487",appId:"1:379521979487:web:8239bd6c2cbc11c7aeb7ea"};
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
+const colors=['#FF3B3B','#00C2FF','#FFD600','#00C26A','#9B59B6'];
+onAuthStateChanged(auth,async(user)=>{
+if(!user){window.location.href='login.html';return;}
+loadData();
+});
+async function loadData(){
+try{
+const memesSnap=await getDocs(query(collection(db,'memes'),orderBy('createdAt','desc'),limit(10)));
+const usersSnap=await getDocs(query(collection(db,'users'),orderBy('createdAt','desc'),limit(10)));
+let totalLikes=0,totalViews=0;
+const memes=[];
+memesSnap.forEach(d=>{const m={id:d.id,...d.data()};memes.push(m);totalLikes+=m.likes||0;totalViews+=m.views||0;});
+const users=[];
+usersSnap.forEach(d=>users.push({id:d.id,...d.data()}));
+document.getElementById('totalUsers').textContent=users.length;
+document.getElementById('totalMemes').textContent=memes.length;
+document.getElementById('totalLikes').textContent=totalLikes;
+document.getElementById('totalViews').textContent=totalViews;
+document.getElementById('memesTable').innerHTML=`
+<table>
+<thead><tr><th>Meme</th><th>Uploader</th><th>Category</th><th>Likes</th><th>Actions</th></tr></thead>
+<tbody>${memes.map(m=>`
+<tr>
+<td><div style="display:flex;align-items:center;gap:10px;">
+${m.imageUrl?`<img src="${m.imageUrl}" style="width:40px;height:40px;border-radius:8px;object-fit:cover;"/>`:'<div style="width:40px;height:40px;border-radius:8px;background:#f4f4f4;display:flex;align-items:center;justify-content:center;">😂</div>'}
+<span style="font-weight:600;font-size:0.88rem;">${m.title}</span></div></td>
+<td style="color:var(--mid);font-size:0.85rem;">${m.userName||'Unknown'}</td>
+<td style="color:var(--mid);font-size:0.85rem;">${m.category||'-'}</td>
+<td style="font-weight:600;">❤️ ${m.likes||0}</td>
+<td><div class="action-btns">
+<button class="btn-xs btn-view" onclick="window.location.href='meme-detail.html?id=${m.id}'">View</button>
+<button class="btn-xs btn-remove" onclick="this.closest('tr').style.opacity='0.4'">Remove</button>
+</div></td>
+</tr>`).join('')}
+</tbody></table>`;
+document.getElementById('usersTable').innerHTML=`
+<table>
+<thead><tr><th>User</th><th>Plan</th></tr></thead>
+<tbody>${users.map((u,i)=>`
+<tr>
+<td><div class="user-row">
+<div class="user-av" style="background:${colors[i%colors.length]};">${(u.name||'U')[0].toUpperCase()}</div>
+<div><div class="user-name">${u.name||'User'}</div><div class="user-email">${u.email||''}</div></div>
+</div></td>
+<td><span class="badge badge-${u.plan||'free'}">${u.plan||'free'}</span></td>
+</tr>`).join('')}
+</tbody></table>`;
+document.getElementById('statsExtra').innerHTML=`
+<div class="revenue-row"><div class="rev-icon" style="background:#E6FFF2;">👥</div><div class="rev-info"><strong>Total Users</strong><span>Registered accounts</span></div><div class="rev-amount" style="color:var(--black);">${users.length}</div></div>
+<div class="revenue-row"><div class="rev-icon" style="background:#FFF9E6;">🖼️</div><div class="rev-info"><strong>Total Memes</strong><span>Published content</span></div><div class="rev-amount" style="color:var(--black);">${memes.length}</div></div>
+<div class="revenue-row"><div class="rev-icon" style="background:#FFF0F0;">❤️</div><div class="rev-info"><strong>Total Likes</strong><span>Across all memes</span></div><div class="rev-amount">${totalLikes}</div></div>
+<div class="revenue-row"><div class="rev-icon" style="background:#E8F5FF;">👁️</div><div class="rev-info"><strong>Total Views</strong><span>Across all memes</span></div><div class="rev-amount">${totalViews}</div></div>`;
+}catch(e){console.error(e);}
+}
+</script>
+</body>
+</html>
