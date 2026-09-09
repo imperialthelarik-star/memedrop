@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://stately-kangaroo-7e35e4.netlify.app/sitemap.xml
