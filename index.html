@@ -5,41 +5,52 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 + <title>MemeDrop - Upload, Share & Monetize Memes Globally</title>
 + <meta name="description" content="MemeDrop is the global platform to upload, share, and monetize memes. Join creators and brands trading viral content worldwide.">
-  <!-- geo-agent:schema:start -->
+    <!-- geo-agent:schema:start -->
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebSite",
-  "name": "memedrop",
-  "alternateName": "MemeDrop",
-  "description": "Global meme platform to upload, share, and monetize memes globally. Trading memes, viral content, and brand promotions all in one place.",
-  "url": "https://stately-kangaroo-7e35e4.netlify.app",
-  "offers": [
+  "@graph": [
     {
-      "@type": "Offer",
-      "name": "Free",
-      "price": "0",
-      "priceCurrency": "USD",
-      "description": "5 meme uploads, +10 via rewards, global visibility, trading meme category"
+      "@type": "WebSite",
+      "name": "memedrop",
+      "@id": "https://memedrop.com/#website",
+      "url": "https://stately-kangaroo-7e35e4.netlify.app",
+      "description": "Upload, share, and monetize memes globally. Trading memes, viral content, brand promotions — all in one place.",
+      "publisher": {
+        "@id": "https://stately-kangaroo-7e35e4.netlify.app#org"
+      }
     },
     {
-      "@type": "Offer",
-      "name": "Creator",
-      "price": "9",
-      "priceCurrency": "USD",
-      "description": "Unlimited uploads, priority feed placement, monetization enabled, custom branding"
-    },
-    {
-      "@type": "Offer",
-      "name": "Business",
-      "price": "49",
-      "priceCurrency": "USD",
-      "description": "Everything in Creator, promoted meme campaigns, dedicated account manager, priority support"
+      "@type": "Organization",
+      "name": "memedrop",
+      "@id": "https://stately-kangaroo-7e35e4.netlify.app#org",
+      "url": "https://stately-kangaroo-7e35e4.netlify.app",
+      "description": "Global meme platform built for creators, businesses, and traders to upload, share, and monetize memes globally.",
+      "offers": [
+        {
+          "@type": "Offer",
+          "name": "Free Plan",
+          "price": "0",
+          "priceCurrency": "USD",
+          "description": "5 meme uploads, +10 via rewards, global visibility, and trading meme category."
+        },
+        {
+          "@type": "Offer",
+          "name": "Creator Plan",
+          "price": "9",
+          "priceCurrency": "USD",
+          "description": "Unlimited uploads, priority feed placement, monetization enabled, custom branding."
+        },
+        {
+          "@type": "Offer",
+          "name": "Business Plan",
+          "price": "49",
+          "priceCurrency": "USD",
+          "description": "Everything in Creator, promoted meme campaigns, dedicated account manager, and priority support."
+        }
+      ]
     }
-  ],
-  "publisher": {
-    "@id": "https://stately-kangaroo-7e35e4.netlify.app#org"
-  }
+  ]
 }
 </script>
   <!-- geo-agent:schema:end -->
